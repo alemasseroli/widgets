@@ -1,6 +1,7 @@
 package widgets.storage;
 
 import org.junit.jupiter.api.Test;
+import widgets.exception.NotGreaterThan0Exception;
 import widgets.exception.WidgetNotFoundException;
 import widgets.widget.Widget;
 
@@ -98,7 +99,7 @@ class WidgetStorageServiceTest {
         assertThat(modified.getZ()).isEqualTo(widget.getZ());
         assertThat(modified.getWidth()).isEqualTo(widget.getWidth());
         assertThat(modified.getHeight()).isEqualTo(widget.getHeight());
-        assertThat(modified.getLastUpdated()).isAfter(widget.getLastUpdated());
+        assertThat(modified.getLastUpdated()).isAfterOrEqualTo(widget.getLastUpdated());
     }
 
     @Test
@@ -132,7 +133,24 @@ class WidgetStorageServiceTest {
         assertThat(modified.getZ()).isEqualTo(widget1.getZ() + 2);
         assertThat(modified.getWidth()).isEqualTo(widget1.getWidth());
         assertThat(modified.getHeight()).isEqualTo(widget1.getHeight());
-        assertThat(modified.getLastUpdated()).isAfter(widget1.getLastUpdated());
+        assertThat(modified.getLastUpdated()).isAfterOrEqualTo(widget1.getLastUpdated());
+    }
+
+    @Test
+    void testUpdateWithInvalidPropertyFails() {
+        Map<String, Integer> attrs = new HashMap<>();
+        attrs.put("x", random.nextInt());
+        attrs.put("y", random.nextInt());
+        attrs.put("z", random.nextInt());
+        attrs.put("width", randomPositiveInt());
+        attrs.put("height", randomPositiveInt());
+        Widget widget = Widget.of(attrs);
+        service = new WidgetStorageService(asList(widget));
+
+        Map<String, Integer> modifications = new HashMap<>();
+        modifications.put("width", 0);
+        modifications.put("height", -10);
+        assertThrows(NotGreaterThan0Exception.class, () -> service.update(widget.getId(), modifications));
     }
 
     @Test

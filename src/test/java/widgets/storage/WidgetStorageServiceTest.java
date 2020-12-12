@@ -49,6 +49,11 @@ class WidgetStorageServiceTest {
         Widget widget4 = Widget.of(attrs);
         service.save(widget4);
         assertThat(service.getAll()).isEqualTo(asList(widget3, widget4, widget1, widget2));
+
+        attrs.remove("z");
+        Widget widget5 = Widget.of(attrs);
+        service.save(widget5);
+        assertThat(service.getAll()).isEqualTo(asList(widget3, widget4, widget1, widget2, widget5));
     }
 
     @Test

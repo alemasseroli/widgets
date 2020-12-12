@@ -9,8 +9,8 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static widgets.TestHelper.randomInt;
-import static widgets.TestHelper.randomPositiveInt;
+import static widgets.WidgetTestHelper.randomInt;
+import static widgets.WidgetTestHelper.randomPositiveInt;
 
 class WidgetTest {
 

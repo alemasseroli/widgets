@@ -8,26 +8,26 @@ import widgets.widget.Widget;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static widgets.TestHelper.randomInt;
+import static widgets.TestHelper.randomPositiveInt;
 
 class WidgetStorageServiceTest {
 
     private WidgetStorageService service;
-    private Random random = new Random();
 
     @Test
     void testSaveWithCorrectOrder() {
         service = new WidgetStorageService();
 
         Map<String, Integer> attrs = new HashMap<>();
-        int z = random.nextInt();
+        int z = randomInt();
         attrs.put("z", z);
-        attrs.put("x", random.nextInt());
-        attrs.put("y", random.nextInt());
+        attrs.put("x", randomInt());
+        attrs.put("y", randomInt());
         attrs.put("width", randomPositiveInt());
         attrs.put("height", randomPositiveInt());
         Widget widget1 = Widget.of(attrs);
@@ -54,9 +54,9 @@ class WidgetStorageServiceTest {
     @Test
     void testCorrectRemove() {
         Map<String, Integer> attrs = new HashMap<>();
-        attrs.put("x", random.nextInt());
-        attrs.put("y", random.nextInt());
-        attrs.put("z", random.nextInt());
+        attrs.put("x", randomInt());
+        attrs.put("y", randomInt());
+        attrs.put("z", randomInt());
         attrs.put("width", randomPositiveInt());
         attrs.put("height", randomPositiveInt());
         Widget widget = Widget.of(attrs);
@@ -76,11 +76,11 @@ class WidgetStorageServiceTest {
     @Test
     void testCorrectUpdate() {
         Map<String, Integer> attrs = new HashMap<>();
-        int x = random.nextInt();
-        int y = random.nextInt();
+        int x = randomInt();
+        int y = randomInt();
         attrs.put("x", x);
         attrs.put("y", y);
-        attrs.put("z", random.nextInt());
+        attrs.put("z", randomInt());
         attrs.put("width", randomPositiveInt());
         attrs.put("height", randomPositiveInt());
         Widget widget = Widget.of(attrs);
@@ -105,9 +105,9 @@ class WidgetStorageServiceTest {
     @Test
     void testCorrectUpdateChangingOrder() {
         Map<String, Integer> attrs = new HashMap<>();
-        int z = random.nextInt();
-        attrs.put("x", random.nextInt());
-        attrs.put("y", random.nextInt());
+        int z = randomInt();
+        attrs.put("x", randomInt());
+        attrs.put("y", randomInt());
         attrs.put("z", z);
         attrs.put("width", randomPositiveInt());
         attrs.put("height", randomPositiveInt());
@@ -126,7 +126,7 @@ class WidgetStorageServiceTest {
         assertThat(widgets.size()).isEqualTo(2);
         assertThat(widgets.get(0)).isEqualTo(widget2);
 
-        Widget modified =widgets.get(1);
+        Widget modified = widgets.get(1);
         assertThat(modified.getId()).isEqualTo(widget1.getId());
         assertThat(modified.getX()).isEqualTo(widget1.getX());
         assertThat(modified.getY()).isEqualTo(widget1.getY());
@@ -139,9 +139,9 @@ class WidgetStorageServiceTest {
     @Test
     void testUpdateWithInvalidPropertyFails() {
         Map<String, Integer> attrs = new HashMap<>();
-        attrs.put("x", random.nextInt());
-        attrs.put("y", random.nextInt());
-        attrs.put("z", random.nextInt());
+        attrs.put("x", randomInt());
+        attrs.put("y", randomInt());
+        attrs.put("z", randomInt());
         attrs.put("width", randomPositiveInt());
         attrs.put("height", randomPositiveInt());
         Widget widget = Widget.of(attrs);
@@ -162,9 +162,9 @@ class WidgetStorageServiceTest {
     @Test
     void testGet() {
         Map<String, Integer> attrs = new HashMap<>();
-        attrs.put("x", random.nextInt());
-        attrs.put("y", random.nextInt());
-        attrs.put("z", random.nextInt());
+        attrs.put("x", randomInt());
+        attrs.put("y", randomInt());
+        attrs.put("z", randomInt());
         attrs.put("width", randomPositiveInt());
         attrs.put("height", randomPositiveInt());
         Widget widget = Widget.of(attrs);
@@ -180,7 +180,4 @@ class WidgetStorageServiceTest {
         assertThrows(WidgetNotFoundException.class, () -> service.get("invalidId"));
     }
 
-    private int randomPositiveInt() {
-        return random.nextInt(50) + 1;
-    }
 }

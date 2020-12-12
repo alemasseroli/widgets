@@ -6,20 +6,19 @@ import widgets.exception.NotGreaterThan0Exception;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static widgets.TestHelper.randomInt;
+import static widgets.TestHelper.randomPositiveInt;
 
 class WidgetTest {
 
-    private Random random = new Random();
-
     @Test
     void testOfWithFullParameters() {
-        int x = random.nextInt();
-        int y = random.nextInt();
-        int z = random.nextInt();
+        int x = randomInt();
+        int y = randomInt();
+        int z = randomInt();
         int width = randomPositiveInt();
         int height = randomPositiveInt();
 
@@ -41,8 +40,8 @@ class WidgetTest {
 
     @Test
     void testOfWithoutZ() {
-        int x = random.nextInt();
-        int y = random.nextInt();
+        int x = randomInt();
+        int y = randomInt();
         int width = randomPositiveInt();
         int height = randomPositiveInt();
 
@@ -63,9 +62,9 @@ class WidgetTest {
 
     @Test
     void testOfWithInvalidWidthOrHeightFails() {
-        int x = random.nextInt();
-        int y = random.nextInt();
-        int z = random.nextInt();
+        int x = randomInt();
+        int y = randomInt();
+        int z = randomInt();
         int width = 0;
         int height = randomPositiveInt();
 
@@ -86,8 +85,8 @@ class WidgetTest {
 
     @Test
     void testOfWithMissingPropertiesFails() {
-        int x = random.nextInt();
-        int z = random.nextInt();
+        int x = randomInt();
+        int z = randomInt();
         int height = randomPositiveInt();
         int width = randomPositiveInt();
 
@@ -101,9 +100,9 @@ class WidgetTest {
 
     @Test
     void testCorrectClone() {
-        int x = random.nextInt();
-        int y = random.nextInt();
-        int z = random.nextInt();
+        int x = randomInt();
+        int y = randomInt();
+        int z = randomInt();
         int width = randomPositiveInt();
         int height = randomPositiveInt();
 
@@ -134,9 +133,9 @@ class WidgetTest {
     @Test
     void testCloneWithInvalidParamsFails() {
         Map<String, Integer> attrs = new HashMap<>();
-        attrs.put("x", random.nextInt());
-        attrs.put("y", random.nextInt());
-        attrs.put("z", random.nextInt());
+        attrs.put("x", randomInt());
+        attrs.put("y", randomInt());
+        attrs.put("z", randomInt());
         attrs.put("width", randomPositiveInt());
         attrs.put("height", randomPositiveInt());
         Widget widget = Widget.of(attrs);
@@ -146,7 +145,4 @@ class WidgetTest {
         assertThrows(NotGreaterThan0Exception.class, () -> widget.cloneWith(modifications));
     }
 
-    private int randomPositiveInt() {
-        return random.nextInt(50) + 1;
-    }
 }

@@ -26,7 +26,7 @@ public class Widget {
         return z;
     }
 
-    public void setZ(int z) {
+    public void setZ(Integer z) {
         this.z = z;
     }
 
@@ -94,7 +94,7 @@ public class Widget {
     public static class WidgetBuilder {
         private int x;
         private int y;
-        private int z;
+        private Integer z;
         private int width;
         private int height;
         private Instant lastUpdated;
@@ -109,7 +109,7 @@ public class Widget {
             return this;
         }
 
-        public WidgetBuilder z(int z) {
+        public WidgetBuilder z(Integer z) {
             this.z = z;
             return this;
         }

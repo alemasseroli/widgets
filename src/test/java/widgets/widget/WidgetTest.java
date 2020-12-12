@@ -40,6 +40,28 @@ class WidgetTest {
     }
 
     @Test
+    void testOfWithoutZ() {
+        int x = random.nextInt();
+        int y = random.nextInt();
+        int width = randomPositiveInt();
+        int height = randomPositiveInt();
+
+        Map<String, Integer> attrs = new HashMap<>();
+        attrs.put("x", x);
+        attrs.put("y", y);
+        attrs.put("width", width);
+        attrs.put("height", height);
+        Widget widget = Widget.of(attrs);
+
+        assertThat(widget.getId()).isInstanceOf(String.class);
+        assertThat(widget.getX()).isEqualTo(x);
+        assertThat(widget.getY()).isEqualTo(y);
+        assertThat(widget.getZ()).isEqualTo(null);
+        assertThat(widget.getWidth()).isEqualTo(width);
+        assertThat(widget.getHeight()).isEqualTo(height);
+    }
+
+    @Test
     void testOfWithInvalidWidthOrHeightFails() {
         int x = random.nextInt();
         int y = random.nextInt();

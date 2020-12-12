@@ -98,6 +98,7 @@ class WidgetStorageServiceTest {
         assertThat(modified.getZ()).isEqualTo(widget.getZ());
         assertThat(modified.getWidth()).isEqualTo(widget.getWidth());
         assertThat(modified.getHeight()).isEqualTo(widget.getHeight());
+        assertThat(modified.getLastUpdated()).isAfter(widget.getLastUpdated());
     }
 
     @Test
@@ -123,12 +124,15 @@ class WidgetStorageServiceTest {
         List<Widget> widgets = service.getAll();
         assertThat(widgets.size()).isEqualTo(2);
         assertThat(widgets.get(0)).isEqualTo(widget2);
-        assertThat(widgets.get(1).getId()).isEqualTo(widget1.getId());
-        assertThat(widgets.get(1).getX()).isEqualTo(widget1.getX());
-        assertThat(widgets.get(1).getY()).isEqualTo(widget1.getY());
-        assertThat(widgets.get(1).getZ()).isEqualTo(widget1.getZ() + 2);
-        assertThat(widgets.get(1).getWidth()).isEqualTo(widget1.getWidth());
-        assertThat(widgets.get(1).getHeight()).isEqualTo(widget1.getHeight());
+
+        Widget modified =widgets.get(1);
+        assertThat(modified.getId()).isEqualTo(widget1.getId());
+        assertThat(modified.getX()).isEqualTo(widget1.getX());
+        assertThat(modified.getY()).isEqualTo(widget1.getY());
+        assertThat(modified.getZ()).isEqualTo(widget1.getZ() + 2);
+        assertThat(modified.getWidth()).isEqualTo(widget1.getWidth());
+        assertThat(modified.getHeight()).isEqualTo(widget1.getHeight());
+        assertThat(modified.getLastUpdated()).isAfter(widget1.getLastUpdated());
     }
 
     @Test

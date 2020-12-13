@@ -29,6 +29,7 @@ public class Widget {
 
     public void setZ(Integer z) {
         this.z = z;
+        this.lastUpdated = Instant.now();
     }
 
     public int getX() {

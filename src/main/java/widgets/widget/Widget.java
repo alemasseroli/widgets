@@ -85,6 +85,13 @@ public class Widget {
                 this.lastUpdated);
     }
 
+    boolean isContainedBy(int x1, int y1, int x2, int y2) {
+        return x1 <= (x - width / 2) &&
+                y1 <= (y - height / 2) &&
+                x2 >= (x + width / 2) &&
+                y2 >= (y + height / 2);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -138,28 +145,28 @@ public class Widget {
         private int height;
         private Instant lastUpdated;
 
-        public WidgetBuilder x(int x) {
+        WidgetBuilder x(int x) {
             this.x = x;
             return this;
         }
 
-        public WidgetBuilder y(int y) {
+        WidgetBuilder y(int y) {
             this.y = y;
             return this;
         }
 
-        public WidgetBuilder z(Integer z) {
+        WidgetBuilder z(Integer z) {
             this.z = z;
             return this;
         }
 
-        public WidgetBuilder width(int width) {
+        WidgetBuilder width(int width) {
             validateGreaterThan0("width", width);
             this.width = width;
             return this;
         }
 
-        public WidgetBuilder height(int height) {
+        WidgetBuilder height(int height) {
             validateGreaterThan0("height", height);
             this.height = height;
             return this;
@@ -169,7 +176,7 @@ public class Widget {
             if (value <= 0) throw new NotGreaterThan0Exception(property);
         }
 
-        public Widget build() {
+        Widget build() {
             this.lastUpdated = Instant.now();
             return new Widget(this);
         }

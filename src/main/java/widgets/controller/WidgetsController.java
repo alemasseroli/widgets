@@ -66,5 +66,15 @@ public class WidgetsController {
         }
     }
 
+    @PostMapping("/widgets/search")
+    public ResponseEntity<Object> searchWidgets(@RequestBody Map<String, Integer> limits) {
+        try {
+            final List<Widget> widgets = service.getAllWidgetsInside(limits);
+            return new ResponseEntity<>(widgets, HttpStatus.OK);
+        } catch (MissingPropertyException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
 }
 

@@ -5,6 +5,7 @@ import widgets.exception.NotGreaterThan0Exception;
 
 import java.time.Instant;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -16,7 +17,7 @@ public class Widget {
     private Integer z;
     private int width;
     private int height;
-    private final Instant lastUpdated;
+    private Instant lastUpdated;
 
     public String getId() {
         return id;
@@ -72,6 +73,35 @@ public class Widget {
         return widget;
     }
 
+    public Widget copy() {
+        return new Widget(
+                this.id,
+                this.x,
+                this.y,
+                this.z,
+                this.width,
+                this.height,
+                this.lastUpdated);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Widget widget = (Widget) o;
+        return id.equals(widget.id) &&
+                x == widget.x &&
+                y == widget.y &&
+                z.equals(widget.z) &&
+                width == widget.width &&
+                height == widget.height;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getX(), getY(), getZ(), getWidth(), getHeight(), getLastUpdated());
+    }
+
     private static int getPropertyOrCloned(String property, Map<String, Integer> attr, Integer clonedValue) {
         return Optional.ofNullable(attr.get(property)).orElse(clonedValue);
     }
@@ -82,13 +112,21 @@ public class Widget {
     }
 
     private Widget(WidgetBuilder builder) {
-        this.id = UUID.randomUUID().toString();
-        this.x = builder.x;
-        this.y = builder.y;
-        this.z = builder.z;
-        this.width = builder.width;
-        this.height = builder.height;
-        this.lastUpdated = builder.lastUpdated;
+        this(UUID.randomUUID().toString(), builder);
+    }
+
+    private Widget(String id, WidgetBuilder builder) {
+        this(id, builder.x, builder.y, builder.z, builder.width, builder.height, builder.lastUpdated);
+    }
+
+    private Widget(String id, int x, int y, Integer z, int width, int height, Instant lastUpdated) {
+        this.id = id;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.width = width;
+        this.height = height;
+        this.lastUpdated = lastUpdated;
     }
 
     public static class WidgetBuilder {

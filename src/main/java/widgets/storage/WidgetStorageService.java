@@ -16,66 +16,79 @@ public class WidgetStorageService {
         this(new ArrayList<>());
     }
 
-    public WidgetStorageService(List<Widget> widgets) {
+    WidgetStorageService(List<Widget> widgets) {
         this.widgets = widgets;
     }
 
     public List<Widget> save(Widget widget) {
+        List<Widget> newWidgets = widgets.stream()
+                .map(Widget::copy)
+                .collect(Collectors.toList());
+        insertToWidgetList(widget, newWidgets);
+        widgets = newWidgets;
+        return widgets;
+    }
+
+    private void insertToWidgetList(Widget widget, List<Widget> newWidgets) {
         Integer widgetZ = widget.getZ();
-        if (widgets.isEmpty()) {
+        if (newWidgets.isEmpty()) {
             if (widgetZ == null) widget.setZ(1);
-            widgets.add(widget);
-            return widgets;
+            newWidgets.add(widget);
+            return;
         }
         if (widgetZ == null) {
-            addLast(widget);
-            return widgets;
+            addLast(widget, newWidgets);
+            return;
         }
-        boolean added = false;
         int i = 0;
-        while (i < widgets.size()) {
-            Widget current = widgets.get(i);
+        boolean added = false;
+        while (i < newWidgets.size()) {
+            Widget current = newWidgets.get(i);
             if (current.getZ().equals(widgetZ)) {
                 current.setZ(++widgetZ);
                 if (!added) {
-                    widgets.add(i, widget);
+                    newWidgets.add(i, widget);
                     added = true;
                     i++;
                 }
             } else if (current.getZ() > widgetZ && !added) {
-                widgets.add(i, widget);
+                newWidgets.add(i, widget);
                 added = true;
                 break;
             }
             i++;
         }
         if (!added) {
-            addLast(widget);
+            addLast(widget, newWidgets);
         }
-        return widgets;
     }
 
-    private void addLast(Widget widget) {
+    private void addLast(Widget widget, List<Widget> widgetList) {
         if (widget.getZ() == null) {
-            Widget lastWidget = widgets.get(widgets.size() - 1);
+            Widget lastWidget = widgetList.get(widgetList.size() - 1);
             widget.setZ(lastWidget.getZ() + 1);
         }
-        widgets.add(widget);
+        widgetList.add(widget);
     }
 
     public void remove(String id) {
-        int previousSize = widgets.size();
-        widgets = widgets.stream()
+        widgets = removeFromWidgetList(id);
+    }
+
+    private List<Widget> removeFromWidgetList(String id) {
+        List<Widget> updatedWidgets = widgets.stream()
                 .filter(w -> !w.getId().equals(id))
                 .collect(Collectors.toList());
-        if (widgets.size() == previousSize) throw new WidgetNotFoundException(id);
+        if (updatedWidgets.size() == widgets.size()) throw new WidgetNotFoundException(id);
+        return updatedWidgets;
     }
 
     public Widget update(String id, Map<String, Integer> attributes) {
         Widget widget = get(id);
-        remove(id);
+        List<Widget> updatedWidgets = removeFromWidgetList(id);
         Widget updated = widget.cloneWith(attributes);
-        save(updated);
+        insertToWidgetList(updated, updatedWidgets);
+        widgets = updatedWidgets;
         return updated;
     }
 
